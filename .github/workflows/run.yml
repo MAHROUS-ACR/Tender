@@ -2,7 +2,7 @@ name: Tender Bot Worker
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/30 * * * *"   # كل 30 دقيقة
   workflow_dispatch:
 
 jobs:
@@ -10,16 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # 1- تحميل الكود
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      # 2- تجهيز بايثون
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - run: pip install -r requirements.txt
+      # 3- تثبيت المكتبات
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      - name: Create Firebase file
-        run: printf '%s' "${{ secrets.FIREBASE_KEY }}" > serviceAccount.json
+      # 4- إنشاء ملف Firebase من Secret
+      - name: Create Firebase credentials file
+        run: |
+          printf '%s' "${{ secrets.FIREBASE_KEY }}" > serviceAccount.json
 
+      # 5- تشغيل البوت
       - name: Run bot
         run: python main.py
