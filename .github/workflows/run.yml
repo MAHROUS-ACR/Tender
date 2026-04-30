@@ -1,8 +1,8 @@
-name: Tender Bot
+name: Tender Bot Worker
 
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/30 * * * *"   # كل 30 دقيقة
   workflow_dispatch:
 
 jobs:
@@ -10,18 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # 🔥 الحل الصح لكتابة Firebase file بدون ما نبوّظ JSON
+      - name: Create Firebase credentials file
+        run: |
+          printf '%s' "${{ secrets.FIREBASE_KEY }}" > serviceAccount.json
+
+      # (اختياري للتأكد فقط - احذفه بعد ما تتأكد إنه شغال)
+      # - name: Debug Firebase file
+      #   run: cat serviceAccount.json
+
       - name: Run bot
-        env:
-          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
         run: python main.py
