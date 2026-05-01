@@ -31,7 +31,7 @@ jobs:
       # 🔥 Debug: تأكيد إن الـ secret داخل
       - name: Debug Firebase Secret Length
         env:
-          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS_B64 }}
         run: |
           echo "🔥 SECRET LENGTH = ${#FIREBASE_CREDENTIALS}"
           echo "🔥 FIRST 50 CHARS = ${FIREBASE_CREDENTIALS:0:50}"
