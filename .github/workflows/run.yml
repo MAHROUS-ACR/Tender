@@ -21,13 +21,22 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # مهم لو بتستخدم Selenium
+      # Chrome (Selenium)
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
 
       - name: Install ChromeDriver
         uses: nanasess/setup-chromedriver@v2
 
+      # 🔥 Debug: تأكيد إن الـ secret داخل
+      - name: Debug Firebase Secret Length
+        env:
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+        run: |
+          echo "🔥 SECRET LENGTH = ${#FIREBASE_CREDENTIALS}"
+          echo "🔥 FIRST 50 CHARS = ${FIREBASE_CREDENTIALS:0:50}"
+
+      # 🚀 Run bot
       - name: Run bot
         env:
           FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
