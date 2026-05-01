@@ -8,9 +8,12 @@ print("🔥 Firebase init starting...")
 cred_json = os.getenv("FIREBASE_CREDENTIALS")
 
 if not cred_json:
-    raise Exception("❌ FIREBASE_CREDENTIALS is missing")
+    raise Exception("❌ FIREBASE_CREDENTIALS is missing or empty")
 
-cred_dict = json.loads(cred_json)
+try:
+    cred_dict = json.loads(cred_json)
+except Exception as e:
+    raise Exception(f"❌ Invalid JSON in FIREBASE_CREDENTIALS: {e}")
 
 cred = credentials.Certificate(cred_dict)
 
