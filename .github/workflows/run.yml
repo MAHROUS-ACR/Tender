@@ -23,5 +23,5 @@ jobs:
 
       - name: Run bot
         env:
-          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_KEY }}
         run: python main.py
