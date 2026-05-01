@@ -15,7 +15,9 @@ try:
 except Exception as e:
     raise Exception(f"❌ Invalid JSON in FIREBASE_CREDENTIALS: {e}")
 
-cred = credentials.Certificate(cred_dict)
+cred = credentials.Certificate("path/to/FIREBASE_CREDENTIALS.json")
+firebase_admin.initialize_app(cred)
+
 
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
