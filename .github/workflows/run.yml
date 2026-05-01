@@ -28,16 +28,16 @@ jobs:
       - name: Install ChromeDriver
         uses: nanasess/setup-chromedriver@v2
 
-      # 🔥 Debug: تأكيد إن الـ secret داخل
-      - name: Debug Firebase Secret Length
+      # 🔥 Debug Secret
+      - name: Debug Firebase Secret
         env:
-          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS_B64 }}
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
         run: |
-          echo "🔥 SECRET LENGTH = ${#FIREBASE_CREDENTIALS_B64}"
-          echo "🔥 FIRST 50 CHARS = ${FIREBASE_CREDENTIALS_B64:0:50}"
+          echo "🔥 SECRET LENGTH = ${#FIREBASE_CREDENTIALS}"
+          echo "🔥 FIRST 50 CHARS = ${FIREBASE_CREDENTIALS:0:50}"
 
       # 🚀 Run bot
       - name: Run bot
         env:
-          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS_B64 }}
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
         run: python main.py
