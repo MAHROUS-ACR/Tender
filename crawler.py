@@ -51,43 +51,77 @@ def crawl_links(start_url, max_pages=10):
 
     while queue and len(visited) < max_pages:
         url = queue.pop(0)
-        if url in visited:
+
+        if not url or url in visited:
             continue
 
         visited.add(url)
 
-        html = fetch(url)
-        soup = BeautifulSoup(html, "html.parser")
+        try:
+            html = fetch(url)
+            soup = BeautifulSoup(html, "html.parser")
+        except:
+            continue
 
         for a in soup.find_all("a"):
             href = a.get("href")
+
+            # ❌ ignore bad links
             if not href:
                 continue
+            if href.startswith("mailto:") or href.startswith("javascript:"):
+                continue
 
-            full = urljoin(url, href)
+            # build full URL safely
+            if href.startswith("http"):
+                full = href
+            else:
+                full = urljoin(url, href)
 
-            if any(k in full.lower() for k in ["tender", "procurement", "bid", "rfp", "rfq"]):
+            if not full:
+                continue
+
+            low = full.lower()
+
+            # 🎯 filter relevant links
+            if any(k in low for k in ["tender", "procurement", "bid", "rfp", "rfq"]):
                 results.append(full)
 
-            if "page" in full or "tender" in full:
-                queue.append(full)
+            # 🔁 crawling expansion
+            if any(k in low for k in ["page", "tender", "procurement", "bid"]):
+                if full not in visited:
+                    queue.append(full)
 
     return list(set(results))
 
 
 # =========================
-# EXTRACT PAGE
+# EXTRACT PAGE (SAFE VERSION)
 # =========================
 def extract_page(url):
-    html = fetch(url)
-    soup = BeautifulSoup(html, "html.parser")
+    try:
+        html = fetch(url)
+        soup = BeautifulSoup(html, "html.parser")
 
-    title = soup.find(["h1", "h2", "title"])
-    title = title.get_text(strip=True) if title else ""
+        # title safe extraction
+        title_tag = soup.find(["h1", "h2", "title"])
+        title = title_tag.get_text(strip=True) if title_tag else ""
 
-    return {
-        "title": title,
-        "link": url,
-        "source": url.split("/")[2],
-        "full_text": soup.get_text(" ", strip=True)
-    }
+        # safe source extraction
+        try:
+            source = url.split("/")[2]
+        except:
+            source = "unknown"
+
+        full_text = soup.get_text(" ", strip=True)
+
+        return {
+            "title": title,
+            "link": url,
+            "source": source,
+            "full_text": full_text
+        }
+
+    except Exception as e:
+        print("❌ Extract page error:", url, e)
+        return None
