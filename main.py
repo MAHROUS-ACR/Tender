@@ -7,8 +7,7 @@ from firebase_config import db
 # SOURCES
 # =========================
 SEED_URLS = [
-    "https://www.tendersinfo.com/global-egypt-tenders.php",
-    "https://www.dgmarket.com/tenders"
+    "https://etenders.gov.eg/"
 ]
 
 
