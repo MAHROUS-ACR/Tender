@@ -1,18 +1,19 @@
 import os
 import json
-import base64
 import firebase_admin
 from firebase_admin import credentials, firestore
 
 print("🔥 Firebase starting...")
 
-cred_b64 = os.getenv("FIREBASE_CREDENTIALS_B64")
+firebase_json = os.getenv("FIREBASE_CREDENTIALS")
 
-if not cred_b64:
+if not firebase_json:
     raise Exception("Missing Firebase secret")
 
-cred_json = base64.b64decode(cred_b64).decode("utf-8")
-cred_dict = json.loads(cred_json)
+try:
+    cred_dict = json.loads(firebase_json)
+except Exception as e:
+    raise Exception(f"Invalid Firebase JSON: {e}")
 
 cred = credentials.Certificate(cred_dict)
 
