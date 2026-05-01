@@ -21,6 +21,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # مهم لو بتستخدم Selenium
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Install ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+
       - name: Run bot
         env:
           FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_KEY }}
