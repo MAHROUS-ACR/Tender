@@ -7,7 +7,7 @@ from firebase_config import db
 # SOURCES
 # =========================
 SEED_URLS = [
-    "https://monakasat.com/"
+    "https://www.google.com/search?sca_esv=dc6fd344f330d302&sxsrf=ANbL-n75gHNtITc0lCUka14E567uEiHo6g:1777701692576&q=%D9%85%D9%86%D8%A7%D9%82%D8%B5%D8%A9&spell=1&sa=X&ved=2ahUKEwjx9pvv9pmUAxW4VqQEHaH0DwQQBSgAegQIFxAB&biw=1821&bih=798&dpr=0.75"
 ]
 
 
